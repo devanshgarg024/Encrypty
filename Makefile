@@ -1,7 +1,11 @@
+# Use the MSYS2 native compiler
 CXX = /usr/bin/g++
-CXXFLAGS = -std=c++17 -g -Wall -I. -Isrc/app/encryptDecrypt -Isrc/app/fileHandling -Isrc/app/processes 
-LDLIBS = -lstdc++ 
+# CXXFLAGS can remain the same (OpenSSL headers are in the default system path)
+CXXFLAGS = -std=c++17 -g -Wall -I. -Isrc/app/encryptDecrypt -Isrc/app/fileHandling -Isrc/app/processes
+# Link against the OpenSSL libraries
+LDLIBS = -lssl -lcrypto
 
+# ... (rest of your Makefile is the same)
 MAIN_TARGET = encrypt_decrypt
 CRYPTION_TARGET = cryption
 
@@ -22,10 +26,10 @@ CRYPTION_OBJ = $(CRYPTION_SRC:.cpp=.o)
 all: $(MAIN_TARGET) $(CRYPTION_TARGET)
 
 $(MAIN_TARGET): $(MAIN_OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDLIBS) 
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDLIBS)
 
 $(CRYPTION_TARGET): $(CRYPTION_OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDLIBS) 
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDLIBS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

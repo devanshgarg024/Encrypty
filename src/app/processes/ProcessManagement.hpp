@@ -6,37 +6,40 @@
 #include <mutex>
 #include <atomic>
 #include <semaphore.h>
-#include <sys/types.h>
+#include <iostream>  
 
 class ProcessManagement
 {
-    sem_t* itemsSemaphore;
-    sem_t* emptySlotsSemaphore;
-
 public:
     ProcessManagement();
     ~ProcessManagement();
-    pid_t submitToQueue(std::unique_ptr<Task> task);
+
+    bool submitToQueue(std::unique_ptr<Task> task);
     void executeTask();
 
 private:
     struct SharedMemory {
         std::atomic<int> size;
         char tasks[1000][256];
-        int front;
-        int rear;
+        std::atomic<int> front;
+        std::atomic<int> rear;
 
         void printSharedMemory() {
-            std::cout<<size<<std::endl;
-            std::cout<<front<<std::endl;
-            std::cout<<rear<<std::endl;
+            std::cout << "Size: " << size.load() << std::endl;
+            std::cout << "Front: " << front.load() << std::endl;
+            std::cout << "Rear: " << rear.load() << std::endl;
         }
-
     };
-    SharedMemory* sharedMem;
-    int shmFd;
-    const char* SHM_NAME = "/my_queue";
+
+    SharedMemory* sharedMem;       
+    int shmFd;                     
+
+    sem_t* itemsSemaphore;
+    sem_t* emptySlotsSemaphore;    
+
+    const char* SHM_NAME = "/my_queue"; 
+
     std::mutex queueLock;
 };
 
-#endif
+#endif 
