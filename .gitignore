@@ -1,0 +1,17 @@
+.DS_Store
+# Executable build files
+*.exe
+
+# Object files
+*.o
+
+# Python virtual environment
+myvenv/
+
+# VS Code editor configuration
+.vscode/
+
+# Test directory (and everything inside it)
+# If you want to keep some files in 'test' but ignore others,
+# you can make this more specific, e.g., test/*.encrypted
+test/
