@@ -50,11 +50,9 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            std::cout << "\nAll tasks submitted. Waiting for completion..." << std::endl;
             for (pid_t pid : child_pids) {
                 waitpid(pid, nullptr, 0); // The parent process waits here
             }
-            std::cout << "All processes have finished." << std::endl;
             }
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed = end - start;
