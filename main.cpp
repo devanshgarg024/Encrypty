@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <vector>   
 #include <sys/wait.h>
+#include <chrono>
+
 
 namespace fs = std::filesystem;
 
@@ -22,6 +24,8 @@ int main(int argc, char* argv[]) {
 
     try {
         if (fs::exists(directory) && fs::is_directory(directory)) {
+                auto start = std::chrono::high_resolution_clock::now();
+            {
             ProcessManagement processManagement;
             std::vector<pid_t> child_pids;
 
@@ -53,7 +57,11 @@ int main(int argc, char* argv[]) {
                 waitpid(pid, nullptr, 0); // The parent process waits here
             }
             std::cout << "All processes have finished." << std::endl;
-
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            std::cout << "Total time taken: " << elapsed.count() << " seconds" << std::endl;
+       
         } else {
             std::cout << "Invalid directory path!" << std::endl;
         }
