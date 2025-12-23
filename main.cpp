@@ -2,7 +2,6 @@
 #include <filesystem>
 #include "./src/app/processes/ProcessManagement.hpp"
 #include "./src/app/processes/Task.hpp"
-#include <ctime>
 #include <iomanip>
 #include <string>
 #include <chrono>
@@ -34,11 +33,8 @@ int main(int argc, char* argv[]) {
                     if (f_stream.is_open()) {
                         Action taskAction = (action == "encrypt") ? Action::ENCRYPT : Action::DECRYPT;
                         auto task = std::make_unique<Task>(std::move(f_stream), taskAction, filePath);
-                        
                             std::time_t t = std::time(nullptr);
                             std::tm* now = std::localtime(&t);
-                            std::string x = (action == "encrypt") ? "encryption" : "decryption";
-                            std::cout << "Starting the "<< x <<" at: "<< std::put_time(now, "%Y-%m-%d %H:%M:%S") << std::endl;
                             processManagement.submitToQueue(std::move(task));
 
                     } else {
