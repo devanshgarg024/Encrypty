@@ -5,6 +5,7 @@
 #include <ctime>
 #include <iomanip>
 #include <string>
+#include <chrono>
 
 namespace fs = std::filesystem;
 
@@ -20,6 +21,8 @@ int main(int argc, char* argv[]) {
 
     try {
         if (fs::exists(directory) && fs::is_directory(directory)) {
+            auto start = std::chrono::high_resolution_clock::now();
+            {
             ProcessManagement processManagement;
 
             for (const auto& entry : fs::recursive_directory_iterator(directory)) {
@@ -43,6 +46,10 @@ int main(int argc, char* argv[]) {
                     }
                 }
             }
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            std::cout << "Total time taken: " << elapsed.count() << " seconds" << std::endl;
         } else {
             std::cout << "Invalid directory path!" << std::endl;
         }
