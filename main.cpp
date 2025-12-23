@@ -2,7 +2,6 @@
 #include <filesystem>
 #include "./src/app/processes/ProcessManagement.hpp"
 #include "./src/app/processes/Task.hpp"
-#include <ctime>
 #include <iomanip>
 #include <sys/types.h>
 #include <vector>   
@@ -41,7 +40,6 @@ int main(int argc, char* argv[]) {
                         
                             std::time_t t = std::time(nullptr);
                             std::tm* now = std::localtime(&t);
-                            std::cout << "Starting the " <<((action == "encrypt") ? "encryption " : "decryption ")<<"at: " << std::put_time(now, "%Y-%m-%d %H:%M:%S") << std::endl;
                             pid_t child_pid = processManagement.submitToQueue(std::move(task));
                             if (child_pid > 0) { // A valid PID is positive
                                 child_pids.push_back(child_pid);
